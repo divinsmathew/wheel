@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 
+import { Plus } from "@bigbinary/neeto-icons";
 import EmptyNotesListImage from "images/EmptyNotesList";
 import { Button, PageLoader, Input } from "neetoui/v2";
 import { Container, Header } from "neetoui/v2/layouts";
@@ -16,7 +17,7 @@ const Notes = () => {
   const [loading, setLoading] = useState(true);
   const [showNewNotePane, setShowNewNotePane] = useState(false);
   const [showDeleteAlert, setShowDeleteAlert] = useState(false);
-  const [selectedNoteIds, setSelectedNoteIds] = useState([]);
+  const [selectedNoteId, setSelectedNoteId] = useState(0);
   const [notes, setNotes] = useState([]);
   const [showNotesMenu, setShowNotesMenu] = useState(true);
 
@@ -58,7 +59,7 @@ const Notes = () => {
               <Button
                 onClick={() => setShowNewNotePane(true)}
                 label="Add New Note"
-                icon="ri-add-line"
+                icon={Plus}
               />
             </>
           }
@@ -66,7 +67,9 @@ const Notes = () => {
         {notes.length ? (
           <>
             <NoteList
-              setSelectedNoteIds={setSelectedNoteIds}
+              selectedNoteId={selectedNoteId}
+              setSelectedNoteId={setSelectedNoteId}
+              setShowDeleteAlert={setShowDeleteAlert}
               notes={notes}
               fetchNotes={fetchNotes}
             />
@@ -87,10 +90,10 @@ const Notes = () => {
         />
         {showDeleteAlert && (
           <DeleteAlert
-            selectedNoteIds={selectedNoteIds}
+            selectedNoteId={selectedNoteId}
             onClose={() => setShowDeleteAlert(false)}
             refetch={fetchNotes}
-            setSelectedNoteIds={setSelectedNoteIds}
+            setSelectedNoteId={setSelectedNoteId}
           />
         )}
       </Container>
