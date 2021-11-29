@@ -9,7 +9,7 @@ import { resetAuthTokens } from "apis/axios";
 import { useAuthDispatch } from "contexts/auth";
 import { useUserState } from "contexts/user";
 
-import { APP_NAME, SIDENAV_LINKS } from "./constants";
+import { APP_NAME, SIDENAV_LINKS, USR_IMG_TMP } from "./constants";
 
 const Sidenav = () => {
   const history = useHistory();
@@ -44,19 +44,18 @@ const Sidenav = () => {
       onClick: handleLogout,
     },
   ];
-
   return (
     <Sidebar
       isCollapsed={isSidebarCollapsed}
       navLinks={SIDENAV_LINKS}
       appName={APP_NAME}
       organizationInfo={{
-        name: "Wheel",
-        subdomain: "bigbinary.com",
+        name: "",
+        subdomain: "",
       }}
       profileInfo={{
         name: `${user.first_name} ${user.last_name}`,
-        imageUrl: user.profile_image_path,
+        imageUrl: USR_IMG_TMP,
         email: user.email,
         dropdownProps,
       }}
