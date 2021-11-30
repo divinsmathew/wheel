@@ -2,36 +2,43 @@ import React, { useState } from "react";
 
 import EmptyNotesListImage from "images/EmptyNotesList";
 import { Plus } from "neetoIcons";
-import { Button, Input } from "neetoui/v2";
+import { Button, Input, Alert, Toastr } from "neetoui/v2";
 import { Container, Header } from "neetoui/v2/layouts";
 
 import EmptyState from "components/Common/EmptyState";
 
-import { dummyContacts } from "./constants";
+import { DUMMY_CONTACTS } from "./constants";
 import ContactList from "./ContactList";
-import ContactsMenu from "./ContactsMenu";
-import DeleteAlert from "./DeleteAlert";
+import Menu from "./Menu";
 import NewContactPane from "./Pane/CreateContact";
 
 function Contacts() {
-  const [showContactsMenu, setShowContactsMenu] = useState(true);
-  const [showDeleteAlert, setShowDeleteAlert] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(true);
+  const [isDeleteAlertOpen, setIsDeleteAlertOpen] = useState(false);
   const [showNewContactPane, setShowNewContactPane] = useState(false);
-  const [selectedContactId, setSelectedContactId] = useState(false);
-  const [contacts, setContacts] = useState(dummyContacts);
+  const [selectedContactId, setSelectedContactId] = useState(0);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [contacts, setContacts] = useState(DUMMY_CONTACTS);
+
+  const handleDelete = async () => {
+    setIsDeleting(true);
+    setContacts(contacts =>
+      contacts.filter(contact => contact.id !== selectedContactId)
+    );
+    setIsDeleting(false);
+    setIsDeleteAlertOpen(false);
+    Toastr.success("Contact deleted successfully.");
+  };
 
   return (
     <section className="flex w-full">
       <section>
-        <ContactsMenu
-          all={contacts.length}
-          showContactsMenu={showContactsMenu}
-        ></ContactsMenu>
+        <Menu all={contacts.length} isMenuOpen={isMenuOpen} />
       </section>
       <Container>
         <Header
           title="All Contacts"
-          menuBarToggle={() => setShowContactsMenu(value => !value)}
+          menuBarToggle={() => setIsMenuOpen(value => !value)}
           actionBlock={
             <>
               <Input
@@ -49,7 +56,7 @@ function Contacts() {
         {contacts.length ? (
           <ContactList
             setSelectedContactId={setSelectedContactId}
-            setShowDeleteAlert={setShowDeleteAlert}
+            setShowDeleteAlert={setIsDeleteAlertOpen}
             contacts={contacts}
           />
         ) : (
@@ -61,12 +68,14 @@ function Contacts() {
             primaryActionLabel="Add New Contact"
           />
         )}
-        {showDeleteAlert && (
-          <DeleteAlert
-            selectedContactId={selectedContactId}
-            onClose={() => setShowDeleteAlert(false)}
-            setContacts={setContacts}
-            setShowDeleteAlert={setShowDeleteAlert}
+        {isDeleteAlertOpen && (
+          <Alert
+            isOpen
+            onSubmit={handleDelete}
+            onClose={() => setIsDeleteAlertOpen(false)}
+            message="Are you sure you want to delete this contact? This cannot be undone."
+            title={`Delete Contact`}
+            isSubmitting={isDeleting}
           />
         )}
       </Container>

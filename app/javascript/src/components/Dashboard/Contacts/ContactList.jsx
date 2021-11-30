@@ -1,13 +1,13 @@
 import React from "react";
 
 import { MenuHorizontal } from "neetoIcons";
-import { Typography, Avatar, Dropdown, Table, Pagination } from "neetoui/v2";
+import { Typography, Avatar, Dropdown, Table } from "neetoui/v2";
 
-export default function ContactList({
+const ContactList = ({
   setSelectedContactId,
   setShowDeleteAlert,
   contacts,
-}) {
+}) => {
   const COLUMN_DATA = [
     {
       title: "NAME & ROLE",
@@ -17,7 +17,7 @@ export default function ContactList({
         <div className="flex">
           <Avatar
             user={{
-              name: data.firstName + " " + data.secondName,
+              name: `${data.firstName} ${data.secondName}`,
               imageUrl: data.profilePicUrl,
             }}
             size="medium"
@@ -25,7 +25,7 @@ export default function ContactList({
           />
           <div>
             <Typography style="h5" weight="semibold">
-              {data.firstName + " " + data.secondName}
+              {`${data.firstName} ${data.secondName}`}
             </Typography>
             <Typography style="h6" weight="light">
               {data.role}
@@ -73,14 +73,11 @@ export default function ContactList({
         rowData={contacts}
         columnData={COLUMN_DATA}
         currentPageNumber={3}
+        defaultPageSize={10}
         totalCount={10}
-      />
-      <Pagination
-        count={300}
-        pageNo={3}
-        pageSize={25}
-        className="flex justify-end mt-9"
       />
     </div>
   );
-}
+};
+
+export default ContactList;

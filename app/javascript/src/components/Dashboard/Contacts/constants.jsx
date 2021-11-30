@@ -1,4 +1,4 @@
-export const dummyContacts = [
+export const DUMMY_CONTACTS = [
   {
     id: 0,
     firstName: "Ronald",

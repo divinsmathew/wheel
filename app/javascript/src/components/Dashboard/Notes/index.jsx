@@ -2,13 +2,12 @@ import React, { useState, useEffect } from "react";
 
 import EmptyNotesListImage from "images/EmptyNotesList";
 import { Plus } from "neetoIcons";
-import { Button, PageLoader, Input } from "neetoui/v2";
+import { Button, PageLoader, Input, Alert } from "neetoui/v2";
 import { Container, Header } from "neetoui/v2/layouts";
 
 import notesApi from "apis/notes";
 import EmptyState from "components/Common/EmptyState";
 
-import DeleteAlert from "./DeleteAlert";
 import NotesMenu from "./Menu";
 import NoteList from "./NoteList";
 import NewNotePane from "./Pane/CreateNote";
@@ -20,6 +19,7 @@ const Notes = () => {
   const [selectedNoteId, setSelectedNoteId] = useState(0);
   const [notes, setNotes] = useState([]);
   const [isMenuBarOpen, setIsMenuBarOpen] = useState(true);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
     fetchNotes();
@@ -36,7 +36,19 @@ const Notes = () => {
       setIsLoading(false);
     }
   };
-
+  const handleDelete = async () => {
+    try {
+      setIsDeleting(true);
+      await notesApi.destroy({ ids: [selectedNoteId] });
+      setSelectedNoteId(0);
+      fetchNotes();
+    } catch (error) {
+      logger.error(error);
+    } finally {
+      setShowDeleteAlert(false);
+      setIsDeleting(false);
+    }
+  };
   if (isLoading) {
     return <PageLoader />;
   }
@@ -87,11 +99,13 @@ const Notes = () => {
           setShowPane={setShowNewNotePane}
         />
         {showDeleteAlert && (
-          <DeleteAlert
-            selectedNoteId={selectedNoteId}
+          <Alert
+            isOpen
+            onSubmit={handleDelete}
             onClose={() => setShowDeleteAlert(false)}
-            refetch={fetchNotes}
-            setSelectedNoteId={setSelectedNoteId}
+            message="Are you sure you want to delete this note? This cannot be undone."
+            title={`Delete Note`}
+            isSubmitting={isDeleting}
           />
         )}
       </Container>

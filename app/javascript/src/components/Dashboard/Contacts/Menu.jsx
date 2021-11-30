@@ -4,13 +4,9 @@ import { Search, Settings, Plus } from "neetoIcons";
 import { Typography } from "neetoui/v2";
 import { MenuBar } from "neetoui/v2/layouts";
 
-const ContactsMenu = ({ showContactsMenu, all }) => {
+const Menu = ({ isMenuOpen, all }) => {
   return (
-    <MenuBar
-      showMenu={showContactsMenu}
-      title="Contacts"
-      className="min-h-full"
-    >
+    <MenuBar showMenu={isMenuOpen} title="Contacts" className="min-h-full">
       <MenuBar.Block label="All" count={all} active />
       <MenuBar.Block label="Archived" count={0} />
       <MenuBar.Block label="Completed" count={0} />
@@ -52,4 +48,4 @@ const ContactsMenu = ({ showContactsMenu, all }) => {
   );
 };
 
-export default ContactsMenu;
+export default Menu;
