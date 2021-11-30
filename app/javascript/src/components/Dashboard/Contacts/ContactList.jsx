@@ -68,7 +68,7 @@ const ContactList = ({
   ];
 
   return (
-    <div className="max-w-full h-full table-width">
+    <div className="h-full table-width">
       <Table
         rowData={contacts}
         columnData={COLUMN_DATA}

@@ -1,24 +1,22 @@
 import React, { useState } from "react";
 
+import dayjs from "dayjs";
 import { Formik, Form } from "formik";
 import { Button, Pane } from "neetoui/v2";
 import { Input, Select } from "neetoui/v2/formik";
 
-import formValidationSchemas from "constants/formValidationSchemas";
+import {
+  ROLE_OPTIONS,
+  CONTACT_FORM_INITIAL_VALUES,
+  CONTACT_FORM_VALIDATION_SCHEMA,
+} from "./constants";
 
-import { ROLE_OPTS, FORM_INIT } from "./constants";
-
-export default function ContactForm({ onClose, setContacts }) {
+export default function FillContact({ onClose, setContacts }) {
   const [submitted, setSubmitted] = useState(false);
 
   const getFormattedDate = () => {
-    const options = { weekday: "short", day: "2-digit", year: "numeric" };
-    const stringDateArray = new Date()
-      .toLocaleDateString("en-US", options)
-      .split(" ");
-    return (
-      stringDateArray[1] + " " + stringDateArray[0] + ", " + stringDateArray[2]
-    );
+    const date = new Date();
+    return dayjs(date).format("MMM, D, YYYY");
   };
 
   const handleSubmit = values => {
@@ -32,11 +30,11 @@ export default function ContactForm({ onClose, setContacts }) {
 
   return (
     <Formik
-      initialValues={FORM_INIT}
+      initialValues={CONTACT_FORM_INITIAL_VALUES}
       onSubmit={handleSubmit}
       validateOnBlur={submitted}
       validateOnChange={submitted}
-      validationSchema={formValidationSchemas.contactsForm}
+      validationSchema={CONTACT_FORM_VALIDATION_SCHEMA}
     >
       {({ isSubmitting, handleSubmit }) => (
         <Form className="w-full">
@@ -69,7 +67,7 @@ export default function ContactForm({ onClose, setContacts }) {
               className="flex-grow-0 w-full"
               name="role"
               required
-              options={ROLE_OPTS}
+              options={ROLE_OPTIONS}
               placeholder="Select Role"
             />
           </Pane.Body>

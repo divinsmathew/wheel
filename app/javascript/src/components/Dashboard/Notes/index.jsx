@@ -12,6 +12,8 @@ import NotesMenu from "./Menu";
 import NoteList from "./NoteList";
 import NewNotePane from "./Pane/CreateNote";
 
+const R = require("ramda");
+
 const Notes = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [showNewNotePane, setShowNewNotePane] = useState(false);
@@ -76,23 +78,28 @@ const Notes = () => {
             </>
           }
         />
-        {notes.length ? (
-          <NoteList
-            selectedNoteId={selectedNoteId}
-            setSelectedNoteId={setSelectedNoteId}
-            setShowDeleteAlert={setShowDeleteAlert}
-            notes={notes}
-            fetchNotes={fetchNotes}
-          />
-        ) : (
-          <EmptyState
-            image={EmptyNotesListImage}
-            title="Looks like you don't have any notes!"
-            subtitle="Add your notes to send customized emails to them."
-            primaryAction={() => setShowNewNotePane(true)}
-            primaryActionLabel="Add New Note"
-          />
-        )}
+        {R.ifElse(
+          () => R.gt(notes.length, 0),
+          () => (
+            <NoteList
+              selectedNoteId={selectedNoteId}
+              setSelectedNoteId={setSelectedNoteId}
+              setShowDeleteAlert={setShowDeleteAlert}
+              notes={notes}
+              fetchNotes={fetchNotes}
+            />
+          ),
+          () => (
+            <EmptyState
+              image={EmptyNotesListImage}
+              title="Looks like you don't have any notes!"
+              subtitle="Add your notes to send customized emails to them."
+              primaryAction={() => setShowNewNotePane(true)}
+              primaryActionLabel="Add New Note"
+            />
+          )
+        )(true)}
+
         <NewNotePane
           fetchNotes={fetchNotes}
           showPane={showNewNotePane}
@@ -102,7 +109,9 @@ const Notes = () => {
           <Alert
             isOpen
             onSubmit={handleDelete}
-            onClose={() => setShowDeleteAlert(false)}
+            onClose={() => {
+              setShowDeleteAlert(false);
+            }}
             message="Are you sure you want to delete this note? This cannot be undone."
             title={`Delete Note`}
             isSubmitting={isDeleting}

@@ -2,19 +2,23 @@ import React from "react";
 
 import { Pane, Typography } from "neetoui/v2";
 
-import ContactForm from "./Form";
+import FillContact from "./FillContact";
 
-export default function NewContactPane({ showPane, setShowPane, setContacts }) {
-  const onClose = () => setShowPane(false);
+export default function CreateContact({
+  isNewContactPaneOpen,
+  setIsNewContactPaneOpen,
+  setContacts,
+}) {
+  const onClose = () => setIsNewContactPaneOpen(false);
 
   return (
-    <Pane isOpen={showPane} onClose={onClose}>
+    <Pane isOpen={isNewContactPaneOpen} onClose={onClose}>
       <Pane.Header>
         <Typography style="h2" weight="semibold">
           Create a New Note
         </Typography>
       </Pane.Header>
-      <ContactForm setContacts={setContacts} onClose={onClose} />
+      <FillContact setContacts={setContacts} onClose={onClose} />
     </Pane>
   );
 }

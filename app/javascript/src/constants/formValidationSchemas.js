@@ -23,10 +23,4 @@ export default {
     lastName: Yup.string().required("Required"),
     password: Yup.string().required("Required"),
   }),
-  contactsForm: Yup.object().shape({
-    firstName: Yup.string().required("Title is required"),
-    secondName: Yup.string().required("Description is required"),
-    email: Yup.string().required("Email is required"),
-    role: Yup.object().required("Role is required"),
-  }),
 };

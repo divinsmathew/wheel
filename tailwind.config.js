@@ -16,9 +16,6 @@ module.exports = {
     defaultExtractor: content => content.match(/[A-Za-z0-9-_:/]+/g) || [],
   },
   theme: {
-    maxWidth: {
-      'full': '99%',
-    },
     extend: {
       colors: {
         purple: {

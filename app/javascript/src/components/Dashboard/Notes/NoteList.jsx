@@ -3,6 +3,8 @@ import React, { useEffect, useState } from "react";
 import Card from "./Card";
 import EditNotePane from "./Pane/EditNote";
 
+const R = require("ramda");
+
 const NoteList = ({
   setSelectedNoteId,
   selectedNoteId,
@@ -19,11 +21,11 @@ const NoteList = ({
   useEffect(() => {
     const selectedNote = getActiveNote();
     setSelectedNote(selectedNote);
-  }, [selectedNoteId]);
+  }, [selectedNoteId, getActiveNote]);
   return (
     <>
       <div className="w-full notes-table-height">
-        {notes.length > 0 &&
+        {R.gt(notes.length, 0) &&
           notes.map(note => (
             <Card
               setSelectedNoteId={setSelectedNoteId}

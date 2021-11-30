@@ -1,4 +1,6 @@
-export const ROLE_OPTS = [
+import * as Yup from "yup";
+
+export const ROLE_OPTIONS = [
   {
     label: "Owner",
     value: "value1",
@@ -13,9 +15,16 @@ export const ROLE_OPTS = [
   },
 ];
 
-export const FORM_INIT = {
+export const CONTACT_FORM_INITIAL_VALUES = {
   firstName: "",
   secondName: "",
   email: "",
   role: "",
 };
+
+export const CONTACT_FORM_VALIDATION_SCHEMA = Yup.object().shape({
+  firstName: Yup.string().required("Title is required"),
+  secondName: Yup.string().required("Description is required"),
+  email: Yup.string().required("Email is required"),
+  role: Yup.object().required("Role is required"),
+});
