@@ -1,81 +1,98 @@
 import React, { useState } from "react";
 
-import { Plus } from "@bigbinary/neeto-icons";
 import EmptyNotesListImage from "images/EmptyNotesList";
-import { Button, Input } from "neetoui/v2";
-import { Container, Header } from "neetoui/v2/layouts";
+import { Plus } from "neetoIcons";
+import { Button, Input, Alert, Toastr } from "neetoui/v2";
+import { Header } from "neetoui/v2/layouts";
 
 import EmptyState from "components/Common/EmptyState";
 
-import { dummyContacts } from "./constants";
+import { DUMMY_CONTACTS } from "./constants";
 import ContactList from "./ContactList";
-import ContactsMenu from "./ContactsMenu";
-import DeleteAlert from "./DeleteAlert";
-import NewContactPane from "./Pane/CreateContact";
+import Menu from "./Menu";
+import CreateContact from "./Pane/CreateContact";
+
+const R = require("ramda");
 
 function Contacts() {
-  const [showContactsMenu, setShowContactsMenu] = useState(true);
-  const [showDeleteAlert, setShowDeleteAlert] = useState(false);
-  const [showNewContactPane, setShowNewContactPane] = useState(false);
-  const [selectedContactId, setSelectedContactId] = useState(false);
-  const [contacts, setContacts] = useState(dummyContacts);
+  const [isMenuOpen, setIsMenuOpen] = useState(true);
+  const [isDeleteAlertOpen, setIsDeleteAlertOpen] = useState(false);
+  const [isNewContactPaneOpen, setIsNewContactPaneOpen] = useState(false);
+  const [selectedContactId, setSelectedContactId] = useState(0);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [contacts, setContacts] = useState(DUMMY_CONTACTS);
+
+  const handleDelete = async () => {
+    setIsDeleting(true);
+    setContacts(contacts =>
+      contacts.filter(contact => contact.id !== selectedContactId)
+    );
+    setIsDeleting(false);
+    setIsDeleteAlertOpen(false);
+    Toastr.success("Contact deleted successfully.");
+  };
 
   return (
-    <section className="flex w-full">
-      <section>
-        <ContactsMenu
-          all={contacts.length}
-          showContactsMenu={showContactsMenu}
-        ></ContactsMenu>
-      </section>
-      <Container>
-        <Header
-          title="All Contacts"
-          menuBarToggle={() => setShowContactsMenu(value => !value)}
-          actionBlock={
-            <>
-              <Input
-                className="mr-4 w-72"
-                placeholder="Search Name, Email, Phone Number, Ect."
+    <div className="flex overflow-y-auto flex-col flex-grow justify-start items-start h-screen">
+      <div className="flex w-full">
+        <Menu all={contacts.length} isMenuOpen={isMenuOpen} />
+        <div className="overflow-auto w-full">
+          <div className="mx-5 h-full flex flex-col">
+            <Header
+              title="All Contacts"
+              menuBarToggle={() => setIsMenuOpen(value => !value)}
+              actionBlock={
+                <>
+                  <Input
+                    className="mr-4 w-72"
+                    placeholder="Search Name, Email, Phone Number, Ect."
+                  />
+                  <Button
+                    label="New Contact"
+                    icon={Plus}
+                    onClick={() => setIsNewContactPaneOpen(value => !value)}
+                  />
+                </>
+              }
+            />
+            {R.ifElse(
+              () => R.gt(contacts.length, 0),
+              () => (
+                <ContactList
+                  setSelectedContactId={setSelectedContactId}
+                  setShowDeleteAlert={setIsDeleteAlertOpen}
+                  contacts={contacts}
+                />
+              ),
+              () => (
+                <EmptyState
+                  image={EmptyNotesListImage}
+                  title="Looks like you don't have any contacts!"
+                  subtitle="Add your contacts to send customized emails to them."
+                  primaryAction={() => setIsNewContactPaneOpen(value => !value)}
+                  primaryActionLabel="Add New Contact"
+                />
+              )
+            )(true)}
+            {isDeleteAlertOpen && (
+              <Alert
+                isOpen
+                onSubmit={handleDelete}
+                onClose={() => setIsDeleteAlertOpen(false)}
+                message="Are you sure you want to delete this contact? This cannot be undone."
+                title={`Delete Contact`}
+                isSubmitting={isDeleting}
               />
-              <Button
-                label="New Contact"
-                icon={Plus}
-                onClick={() => setShowNewContactPane(value => !value)}
-              />
-            </>
-          }
+            )}
+          </div>
+        </div>
+        <CreateContact
+          isNewContactPaneOpen={isNewContactPaneOpen}
+          setIsNewContactPaneOpen={setIsNewContactPaneOpen}
+          setContacts={setContacts}
         />
-        {contacts.length ? (
-          <ContactList
-            setSelectedContactId={setSelectedContactId}
-            setShowDeleteAlert={setShowDeleteAlert}
-            contacts={contacts}
-          />
-        ) : (
-          <EmptyState
-            image={EmptyNotesListImage}
-            title="Looks like you don't have any contacts!"
-            subtitle="Add your contacts to send customized emails to them."
-            primaryAction={() => setShowNewContactPane(value => !value)}
-            primaryActionLabel="Add New Contact"
-          />
-        )}
-        {showDeleteAlert && (
-          <DeleteAlert
-            selectedContactId={selectedContactId}
-            onClose={() => setShowDeleteAlert(false)}
-            setContacts={setContacts}
-            setShowDeleteAlert={setShowDeleteAlert}
-          />
-        )}
-      </Container>
-      <NewContactPane
-        showPane={showNewContactPane}
-        setShowPane={setShowNewContactPane}
-        setContacts={setContacts}
-      />
-    </section>
+      </div>
+    </div>
   );
 }
 

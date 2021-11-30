@@ -1,3 +1,19 @@
+import * as Yup from "yup";
+
+export const NOTES_FORM_VALIDATIONS = Yup.object().shape({
+  title: Yup.string().required("Title is required"),
+  description: Yup.string().required("Description is required"),
+  contact: Yup.object().required("Assigned contact is required"),
+  tags: Yup.object().required("Tag is required"),
+});
+
+export const NOTES_FORM_INITIAL_VALUES = {
+  title: "",
+  description: "",
+  contact: "",
+  tags: "",
+};
+
 export const ASSIGNED_CONTACTS_OPTS = [
   {
     label: "User One",
@@ -24,18 +40,18 @@ export const ROLE_TAG_OPTS = [
   },
   {
     label: "User Flow",
-    value: "value2",
-  },
-  {
-    label: "UX",
     value: "value3",
   },
   {
-    label: "Bugs",
+    label: "UX",
     value: "value4",
   },
   {
-    label: "V2",
+    label: "Bugs",
     value: "value5",
+  },
+  {
+    label: "V2",
+    value: "value6",
   },
 ];

@@ -5,9 +5,12 @@ import { Button, Pane } from "neetoui/v2";
 import { Input, Textarea, Select } from "neetoui/v2/formik";
 
 import notesApi from "apis/notes";
-import formValidationSchemas from "constants/formValidationSchemas";
 
-import { ASSIGNED_CONTACTS_OPTS, ROLE_TAG_OPTS } from "./constants";
+import {
+  ASSIGNED_CONTACTS_OPTS,
+  ROLE_TAG_OPTS,
+  NOTES_FORM_VALIDATIONS,
+} from "./constants";
 
 export default function NoteForm({ onClose, refetch, note, isEdit }) {
   const [submitted, setSubmitted] = useState(false);
@@ -32,7 +35,7 @@ export default function NoteForm({ onClose, refetch, note, isEdit }) {
       onSubmit={handleSubmit}
       validateOnBlur={submitted}
       validateOnChange={submitted}
-      validationSchema={formValidationSchemas.notesForm}
+      validationSchema={NOTES_FORM_VALIDATIONS}
     >
       {({ isSubmitting, handleSubmit }) => (
         <Form className="w-full">

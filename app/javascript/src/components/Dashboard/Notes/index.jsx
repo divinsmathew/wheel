@@ -1,25 +1,27 @@
 import React, { useState, useEffect } from "react";
 
-import { Plus } from "@bigbinary/neeto-icons";
 import EmptyNotesListImage from "images/EmptyNotesList";
-import { Button, PageLoader, Input } from "neetoui/v2";
+import { Plus } from "neetoIcons";
+import { Button, PageLoader, Input, Alert } from "neetoui/v2";
 import { Container, Header } from "neetoui/v2/layouts";
 
 import notesApi from "apis/notes";
 import EmptyState from "components/Common/EmptyState";
 
-import DeleteAlert from "./DeleteAlert";
+import NotesMenu from "./Menu";
 import NoteList from "./NoteList";
-import NotesMenu from "./NotesMenu";
 import NewNotePane from "./Pane/CreateNote";
 
+const R = require("ramda");
+
 const Notes = () => {
-  const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
   const [showNewNotePane, setShowNewNotePane] = useState(false);
   const [showDeleteAlert, setShowDeleteAlert] = useState(false);
   const [selectedNoteId, setSelectedNoteId] = useState(0);
   const [notes, setNotes] = useState([]);
-  const [showNotesMenu, setShowNotesMenu] = useState(true);
+  const [isMenuBarOpen, setIsMenuBarOpen] = useState(true);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
     fetchNotes();
@@ -27,29 +29,41 @@ const Notes = () => {
 
   const fetchNotes = async () => {
     try {
-      setLoading(true);
+      setIsLoading(true);
       const { data } = await notesApi.fetch();
       setNotes(data.notes);
     } catch (error) {
       logger.error(error);
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
   };
-
-  if (loading) {
+  const handleDelete = async () => {
+    try {
+      setIsDeleting(true);
+      await notesApi.destroy({ ids: [selectedNoteId] });
+      setSelectedNoteId(0);
+      fetchNotes();
+    } catch (error) {
+      logger.error(error);
+    } finally {
+      setShowDeleteAlert(false);
+      setIsDeleting(false);
+    }
+  };
+  if (isLoading) {
     return <PageLoader />;
   }
 
   return (
     <section className="flex w-full">
       <section>
-        <NotesMenu showNotesMenu={showNotesMenu}></NotesMenu>
+        <NotesMenu isMenuBarOpen={isMenuBarOpen}></NotesMenu>
       </section>
       <Container>
         <Header
           title="All Notes"
-          menuBarToggle={() => setShowNotesMenu(value => !value)}
+          menuBarToggle={() => setIsMenuBarOpen(value => !value)}
           actionBlock={
             <>
               <Input
@@ -64,34 +78,43 @@ const Notes = () => {
             </>
           }
         />
-        {notes.length ? (
-          <NoteList
-            selectedNoteId={selectedNoteId}
-            setSelectedNoteId={setSelectedNoteId}
-            setShowDeleteAlert={setShowDeleteAlert}
-            notes={notes}
-            fetchNotes={fetchNotes}
-          />
-        ) : (
-          <EmptyState
-            image={EmptyNotesListImage}
-            title="Looks like you don't have any notes!"
-            subtitle="Add your notes to send customized emails to them."
-            primaryAction={() => setShowNewNotePane(true)}
-            primaryActionLabel="Add New Note"
-          />
-        )}
+        {R.ifElse(
+          () => R.gt(notes.length, 0),
+          () => (
+            <NoteList
+              selectedNoteId={selectedNoteId}
+              setSelectedNoteId={setSelectedNoteId}
+              setShowDeleteAlert={setShowDeleteAlert}
+              notes={notes}
+              fetchNotes={fetchNotes}
+            />
+          ),
+          () => (
+            <EmptyState
+              image={EmptyNotesListImage}
+              title="Looks like you don't have any notes!"
+              subtitle="Add your notes to send customized emails to them."
+              primaryAction={() => setShowNewNotePane(true)}
+              primaryActionLabel="Add New Note"
+            />
+          )
+        )(true)}
+
         <NewNotePane
           fetchNotes={fetchNotes}
           showPane={showNewNotePane}
           setShowPane={setShowNewNotePane}
         />
         {showDeleteAlert && (
-          <DeleteAlert
-            selectedNoteId={selectedNoteId}
-            onClose={() => setShowDeleteAlert(false)}
-            refetch={fetchNotes}
-            setSelectedNoteId={setSelectedNoteId}
+          <Alert
+            isOpen
+            onSubmit={handleDelete}
+            onClose={() => {
+              setShowDeleteAlert(false);
+            }}
+            message="Are you sure you want to delete this note? This cannot be undone."
+            title={`Delete Note`}
+            isSubmitting={isDeleting}
           />
         )}
       </Container>

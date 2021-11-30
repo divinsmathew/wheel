@@ -1,11 +1,11 @@
-export const dummyContacts = [
+export const DUMMY_CONTACTS = [
   {
     id: 0,
     firstName: "Ronald",
     secondName: "Richards",
     role: "Owner",
     email: "albert@bower.com",
-    createdAt: "Wed 5, 2021",
+    createdAt: "Wed, 5, 2021",
   },
   {
     id: 1,
@@ -13,7 +13,7 @@ export const dummyContacts = [
     secondName: "Jones",
     role: "Owner",
     email: "albert@bower.com",
-    createdAt: "Sun 15, 2021",
+    createdAt: "Sun, 15, 2021",
     profilePicUrl: "https://randomuser.me/api/portraits/med/men/51.jpg",
   },
   {
@@ -22,7 +22,7 @@ export const dummyContacts = [
     secondName: "Richards",
     role: "Owner",
     email: "albert@bower.com",
-    createdAt: "Wed 5, 2021",
+    createdAt: "Wed, 5, 2021",
   },
   {
     id: 3,
@@ -30,7 +30,7 @@ export const dummyContacts = [
     secondName: "Jones",
     role: "Owner",
     email: "albert@bower.com",
-    createdAt: "Sun 15, 2021",
+    createdAt: "Sun, 15, 2021",
     profilePicUrl: "https://randomuser.me/api/portraits/med/men/51.jpg",
   },
   {
@@ -39,7 +39,7 @@ export const dummyContacts = [
     secondName: "Richards",
     role: "Owner",
     email: "albert@bower.com",
-    createdAt: "Wed 5, 2021",
+    createdAt: "Wed, 5, 2021",
   },
   {
     id: 5,
@@ -47,7 +47,7 @@ export const dummyContacts = [
     secondName: "Jones",
     role: "Owner",
     email: "albert@bower.com",
-    createdAt: "Sun 15, 2021",
+    createdAt: "Sun, 15, 2021",
     profilePicUrl: "https://randomuser.me/api/portraits/med/men/51.jpg",
   },
   {
@@ -56,7 +56,7 @@ export const dummyContacts = [
     secondName: "Richards",
     role: "Owner",
     email: "albert@bower.com",
-    createdAt: "Wed 5, 2021",
+    createdAt: "Wed, 5, 2021",
   },
   {
     id: 7,
@@ -64,7 +64,7 @@ export const dummyContacts = [
     secondName: "Jones",
     role: "Owner",
     email: "albert@bower.com",
-    createdAt: "Sun 15, 2021",
+    createdAt: "Sun, 15, 2021",
     profilePicUrl: "https://randomuser.me/api/portraits/med/men/51.jpg",
   },
   {
@@ -73,6 +73,6 @@ export const dummyContacts = [
     secondName: "Richards",
     role: "Owner",
     email: "albert@bower.com",
-    createdAt: "Wed 5, 2021",
+    createdAt: "Wed, 5, 2021",
   },
 ];

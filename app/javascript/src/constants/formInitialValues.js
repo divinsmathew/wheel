@@ -13,10 +13,4 @@ export default {
     password: "",
     passwordConfirmation: "",
   },
-  notesForm: {
-    title: "",
-    description: "",
-    contact: "",
-    tags: "",
-  },
 };
