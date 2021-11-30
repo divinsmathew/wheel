@@ -9,16 +9,17 @@ import { resetAuthTokens } from "apis/axios";
 import { useAuthDispatch } from "contexts/auth";
 import { useUserState } from "contexts/user";
 
-import { APP_NAME, SIDENAV_LINKS, USR_IMG_TMP } from "./constants";
+import {
+  APP_NAME,
+  SIDENAV_LINKS,
+  TEMP_USER_PROFILE_IMAGE_URL,
+} from "./constants";
 
 const Sidenav = () => {
   const history = useHistory();
   const authDispatch = useAuthDispatch();
-
   const { user } = useUserState();
-
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(true);
-
   const handleLogout = async () => {
     try {
       await authenticationApi.logout();
@@ -55,7 +56,7 @@ const Sidenav = () => {
       }}
       profileInfo={{
         name: `${user.first_name} ${user.last_name}`,
-        imageUrl: USR_IMG_TMP,
+        imageUrl: TEMP_USER_PROFILE_IMAGE_URL,
         email: user.email,
         dropdownProps,
       }}
