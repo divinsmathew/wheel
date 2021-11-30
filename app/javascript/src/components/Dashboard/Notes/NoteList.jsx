@@ -10,12 +10,15 @@ const NoteList = ({
   notes = [],
   fetchNotes,
 }) => {
-  const [showEditNote, setShowEditNote] = useState(false);
+  const [isEditNotePaneOpen, setIsEditNotePaneOpen] = useState(false);
   const [selectedNote, setSelectedNote] = useState(
     notes.find(n => n.id === selectedNoteId)
   );
+  const getActiveNote = () => notes.find(note => note.id === selectedNoteId);
+
   useEffect(() => {
-    setSelectedNote(notes.find(n => n.id === selectedNoteId));
+    const selectedNote = getActiveNote();
+    setSelectedNote(selectedNote);
   }, [selectedNoteId]);
   return (
     <>
@@ -31,8 +34,8 @@ const NoteList = ({
           ))}
       </div>
       <EditNotePane
-        showPane={showEditNote}
-        setShowPane={setShowEditNote}
+        isEditNotePaneOpen={isEditNotePaneOpen}
+        setIsEditNotePaneOpen={setIsEditNotePaneOpen}
         fetchNotes={fetchNotes}
         note={selectedNote}
       />

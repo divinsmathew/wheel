@@ -31,7 +31,8 @@ function Card({ note, setSelectedNoteId, setShowDeleteAlert }) {
                   setSelectedNoteId(note.id);
                 }}
               >
-                Edit
+                {" "}
+                Edit{" "}
               </li>
               <li
                 onClick={() => {
@@ -39,7 +40,8 @@ function Card({ note, setSelectedNoteId, setShowDeleteAlert }) {
                   setShowDeleteAlert(true);
                 }}
               >
-                Delete
+                {" "}
+                Delete{" "}
               </li>
             </Dropdown>
           </div>
