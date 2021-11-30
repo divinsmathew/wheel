@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 
-import { Plus } from "@bigbinary/neeto-icons";
 import EmptyNotesListImage from "images/EmptyNotesList";
+import { Plus } from "neetoIcons";
 import { Button, PageLoader, Input } from "neetoui/v2";
 import { Container, Header } from "neetoui/v2/layouts";
 
@@ -9,17 +9,17 @@ import notesApi from "apis/notes";
 import EmptyState from "components/Common/EmptyState";
 
 import DeleteAlert from "./DeleteAlert";
+import NotesMenu from "./Menu";
 import NoteList from "./NoteList";
-import NotesMenu from "./NotesMenu";
 import NewNotePane from "./Pane/CreateNote";
 
 const Notes = () => {
-  const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
   const [showNewNotePane, setShowNewNotePane] = useState(false);
   const [showDeleteAlert, setShowDeleteAlert] = useState(false);
   const [selectedNoteId, setSelectedNoteId] = useState(0);
   const [notes, setNotes] = useState([]);
-  const [showNotesMenu, setShowNotesMenu] = useState(true);
+  const [isMenuBarOpen, setIsMenuBarOpen] = useState(true);
 
   useEffect(() => {
     fetchNotes();
@@ -27,29 +27,29 @@ const Notes = () => {
 
   const fetchNotes = async () => {
     try {
-      setLoading(true);
+      setIsLoading(true);
       const { data } = await notesApi.fetch();
       setNotes(data.notes);
     } catch (error) {
       logger.error(error);
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
   };
 
-  if (loading) {
+  if (isLoading) {
     return <PageLoader />;
   }
 
   return (
     <section className="flex w-full">
       <section>
-        <NotesMenu showNotesMenu={showNotesMenu}></NotesMenu>
+        <NotesMenu isMenuBarOpen={isMenuBarOpen}></NotesMenu>
       </section>
       <Container>
         <Header
           title="All Notes"
-          menuBarToggle={() => setShowNotesMenu(value => !value)}
+          menuBarToggle={() => setIsMenuBarOpen(value => !value)}
           actionBlock={
             <>
               <Input

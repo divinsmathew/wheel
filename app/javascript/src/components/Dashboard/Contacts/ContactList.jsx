@@ -1,6 +1,6 @@
 import React from "react";
 
-import { MenuHorizontal } from "@bigbinary/neeto-icons";
+import { MenuHorizontal } from "neetoIcons";
 import { Typography, Avatar, Dropdown, Table, Pagination } from "neetoui/v2";
 
 export default function ContactList({

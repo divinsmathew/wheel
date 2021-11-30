@@ -1,12 +1,12 @@
 import React from "react";
 
-import { Search, Settings, Plus } from "@bigbinary/neeto-icons";
+import { Search, Settings, Plus } from "neetoIcons";
 import { Typography } from "neetoui/v2";
 import { MenuBar } from "neetoui/v2/layouts";
 
-const NotesMenu = ({ showNotesMenu }) => {
+const NotesMenu = ({ isMenuBarOpen }) => {
   return (
-    <MenuBar showMenu={showNotesMenu} title="Notes" className="min-h-full">
+    <MenuBar showMenu={isMenuBarOpen} title="Notes" className="min-h-full">
       <MenuBar.Block label="All" count={200} active />
       <MenuBar.Block label="Users" count={80} />
       <MenuBar.Block label="Leads" count={60} />

@@ -1,4 +1,4 @@
-import { Text, UserCircle, NeetoInsights } from "@bigbinary/neeto-icons";
+import { Text, UserCircle, NeetoInsights } from "neetoIcons";
 
 export const APP_NAME = "Wheel";
 

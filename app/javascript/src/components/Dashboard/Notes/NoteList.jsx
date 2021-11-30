@@ -1,30 +1,15 @@
 import React, { useEffect, useState } from "react";
 
-import NoteItemCard from "./NoteItemCard";
+import Card from "./Card";
 import EditNotePane from "./Pane/EditNote";
 
-export const COLUMN_DATA = [
-  {
-    title: "Title",
-    dataIndex: "title",
-    key: "title",
-    width: "30%",
-  },
-  {
-    title: "Description",
-    dataIndex: "description",
-    key: "description",
-    width: "70%",
-  },
-];
-
-export default function NoteList({
+const NoteList = ({
   setSelectedNoteId,
   selectedNoteId,
   setShowDeleteAlert,
   notes = [],
   fetchNotes,
-}) {
+}) => {
   const [showEditNote, setShowEditNote] = useState(false);
   const [selectedNote, setSelectedNote] = useState(
     notes.find(n => n.id === selectedNoteId)
@@ -37,7 +22,7 @@ export default function NoteList({
       <div className="w-full notes-table-height">
         {notes.length > 0 &&
           notes.map(note => (
-            <NoteItemCard
+            <Card
               setSelectedNoteId={setSelectedNoteId}
               setShowDeleteAlert={setShowDeleteAlert}
               key={note.id}
@@ -53,4 +38,6 @@ export default function NoteList({
       />
     </>
   );
-}
+};
+
+export default NoteList;
